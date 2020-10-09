@@ -62,6 +62,8 @@ public class basics {
 		System.out.println(actualAddress);
 		Assert.assertEquals(actualAddress, newAddress);
 		
+		System.out.println("New just to test");
+		
 			 
 			 
 			 

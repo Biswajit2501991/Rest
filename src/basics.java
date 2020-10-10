@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.*;
 
 import org.testng.Assert;
 
+import files.ReUsableMethods;
 import files.payload;
 
 public class basics {
@@ -52,18 +53,17 @@ public class basics {
 		
 			 // Get to validate if address is update
 			
-		String getPlaceResponse	= given().log().all().queryParam("Key", "qaclick123")
+		String getPlaceResponse	= given().log().all().queryParam("key", "qaclick123")
 			 .queryParam("place_id", placeId)
 			 .when().get("maps/api/place/get/json")
 			 .then().assertThat().log().all().statusCode(200).extract().response().asString();
-			 
-		JsonPath Js1 = new JsonPath(getPlaceResponse);
-		String actualAddress = Js1.getString("address");
-		System.out.println(actualAddress);
-		Assert.assertEquals(actualAddress, newAddress);
-		
-		System.out.println("New just to test");
-		
+			JsonPath js1 = ReUsableMethods.rawToJson(getPlaceResponse) ;
+			String actualAddress = js1.getString("address");
+			System.out.println(actualAddress);
+			Assert.assertEquals(actualAddress, newAddress);
+			// 	Cucumber Junit , testng
+			// Assert.assertEquals(actualAddress, "Pacific Ocean"); it will fail*/
+		System.out.println(getPlaceResponse);
 			 
 			 
 			 

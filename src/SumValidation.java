@@ -23,7 +23,7 @@ public class SumValidation {
 		}
 		System.out.println(sum);
 		int purchaseAmount = js.getInt("dashboard.purchaseAmount");
-		Assert.assertEquals(sum, purchaseAmount);
+		Assert.assertEquals(sum, purchaseAmount); // It will fail as have added new course - remove it from payload then run the code
 		
 	}
 	

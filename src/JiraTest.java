@@ -4,6 +4,7 @@ import java.io.File;
 
 import io.restassured.RestAssured;
 import io.restassured.filter.session.SessionFilter;
+import io.restassured.path.json.JsonPath;
 
 
 
@@ -49,7 +50,7 @@ public class JiraTest {
 		System.out.println(response2);
 		
 		
-		given().pathParam("key", "10004").log().all().header("Content-Type","application/json").header("JSESSIONID",session)
+		String addCommentResponse = given().pathParam("key", "10004").log().all().header("Content-Type","application/json").header("JSESSIONID",session)
 		.body("{\r\n" + 
 				"    \"body\": \"This is my 2nd Comment.\",\r\n" + 
 				"    \"visibility\": {\r\n" + 
@@ -58,16 +59,38 @@ public class JiraTest {
 				"    }\r\n" + 
 				"}")
 				.filter(session)
-				.when().post("rest/api/2/issue/{key}/comment").then().log().all().assertThat().statusCode(201);
+				.when().post("rest/api/2/issue/{key}/comment").then().log().all().assertThat().statusCode(201)
+				.extract().response().toString();
+		
+		JsonPath js =new JsonPath(addCommentResponse);
+		String commentId = js.getString("id");
+		System.out.println(commentId);
 		
 		
-		// Add Attachment	
+		// Add Attachment using multipart
 		given().header("X-Atlassian-Token","no-check").filter(session).pathParam("key", "10004")
 		.header("Content-Type","multipart/form-data")
 		.multiPart("file",new File("C:\\Users\\Biswa\\Desktop\\DemoProject\\jira.txt")) // or new File("JIRA.text")
 		.when()
 		.post("/rest/api/2/issue/{key}/attachments")
 		.then().log().all().assertThat().statusCode(200);
+		
+		
+		// Get issue ( get request ) // Get the comment field
+		
+		String issueDetails = given().filter(session).pathParam("key", "10004")
+				.queryParam("fields", "comment")
+				.log().all()
+				.when().get("/rest/api/2/issue/{key}")
+				.then().log().all().extract().response().asString();
+				System.out.println(issueDetails);
+				
+				JsonPath js1 = new JsonPath(issueDetails);
+				int commentsCount = js1.getInt("fields.comment.comments.size()");
+				for(int a=0;a<commentsCount; a++)
+				{
+					System.out.println(js1.getInt("fields.comment.comments["+a+"].id"));
+				}
 		
 		
 	}

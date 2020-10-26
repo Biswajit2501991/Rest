@@ -85,5 +85,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="C:/Temp/rest/jars/jcommander-1.27.jar"/>
 	<classpathentry kind="lib" path="C:/Temp/rest/jars/testng-6.7.jar"/>
+	<classpathentry kind="lib" path="C:/Temp/rest/jars/gson-2.8.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
